@@ -1,0 +1,25 @@
+FROM fedora:latest
+
+RUN dnf check-update && dnf upgrade; exit 0
+
+RUN dnf install -y python3.10 dotnet java-latest-openjdk-devel zsh git gcc clang llvm lld \
+    python3-pip poetry dnf-plugins-core openssl openssl-devel podman
+
+# Install GitHub CLI
+RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
+    dnf install -y gh
+
+# Install rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# For proper functioning of poetry
+RUN ln -s python3 /usr/bin/python
+
+# Poetry config
+RUN poetry config virtualenvs.in-project true
+
+# Rust utilities
+RUN source $HOME/.cargo/env && cargo install bat ripgrep fd-find trunk tokei cargo-audit \
+    cargo-edit just du-dust
+
+ENTRYPOINT [ "/bin/zsh" ]
