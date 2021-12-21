@@ -4,16 +4,16 @@ A repository containing my personal containerised development environments
 
 ## Included software
 
-- gcc and clang
-- LLVM tools and lld
-- Rust development workflow (rustup, rustc, cargo)
-- Rust WASM workflow with [Trunk](https://trunkrs.dev/)
-- Python 3.10
+- C/C++ toolchain (gcc & clang)
+- LLVM tools & lld
+- Rust toolchain (rustup, rustc, cargo)
+- Rust WASM toolchain with [Trunk](https://trunkrs.dev/)
+- Python 3.10 & PIP
+- Ruby & RubyGems
 - [Poetry](https://python-poetry.org/)
 - .NET 5
 - OpenJDK 17
-- [Podman](https://podman.io/) for building and running containers
-- Next-gen rust tools:
+- Next-gen rust tools (old tools still present):
   | Old  | Rust  |
   |------|-------|
   | cat  | bat   |
@@ -22,10 +22,11 @@ A repository containing my personal containerised development environments
   | make | just  |
   | find | fd    |
   | cloc | tokei |
+  | rm   | rip   |
 
 ## Build
 
-Only tested on podman.
+Podman is recommended
 
 ### podman
 
@@ -50,6 +51,12 @@ docker build -f fedora/Containerfile fedora [...options]
 
 1. Once container is running with your desired configuration, do: \
 `podman generate kube [container-name] > [filename].yml`
-2. This file can be used to instantiate a pod either with `kubectl` or `podman`, vastly
-reducing repetition.
+2. This file can be used to instantiate a pod either with `kubectl` (in your production
+environment) or `podman`, vastly reducing repetition.
 3. To instantiate using podman, run: `podman play kube [filename].yml`
+
+## An important note
+
+Remember, it's Fedora: a full blown Linux distro. So you can add whatever software you
+need using `dnf`. Anything that does not require a systemctl daemon should run. Keep in
+mind that the entrypoint shell is `zsh`, not `bash`. Happy Developing!
