@@ -31,4 +31,6 @@ RUN chsh -s /bin/zsh && touch $HOME/.zsh_history && mkdir $HOME/.zsh && \
     rustup completions zsh rustup > $HOME/.zsh/completions/_rustup && \
     rustup completions zsh cargo > $HOME/.zsh/completions/_cargo
 
+SHELL [ "/bin/zsh", "-c" ]
+
 ENTRYPOINT [ "/bin/zsh" ]

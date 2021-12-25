@@ -17,7 +17,7 @@ jobs:
         run: podman build -t fedora-dev-env:test fedora
 
       - name: Run
-        run: podman run --name envtest -d fedora-dev-env:test
+        run: podman run --name envtest -dt fedora-dev-env:test
 
       - name: Test
         run: podman exec -i envtest zsh -c "$(cat ./.github/workflows/test.sh)"
@@ -35,7 +35,7 @@ jobs:
         run: docker build -t fedora-dev-env:test fedora
 
       - name: Run
-        run: docker run --name envtest -d fedora-dev-env:test
+        run: docker run --name envtest -dt fedora-dev-env:test
 
       - name: Test
         run: docker exec -i envtest zsh -c "$(cat ./.github/workflows/test.sh)"
