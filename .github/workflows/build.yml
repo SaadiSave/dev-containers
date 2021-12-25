@@ -20,7 +20,7 @@ jobs:
         run: podman run --name envtest -d fedora-dev-env:test
 
       - name: Test
-        run: podman exec -i envtest "$(cat ./.github/workflows/test.sh)"
+        run: podman exec -i envtest zsh -c "$(cat ./.github/workflows/test.sh)"
 
   build-docker:
     runs-on: ubuntu-latest
@@ -38,4 +38,4 @@ jobs:
         run: docker run --name envtest -d fedora-dev-env:test
 
       - name: Test
-        run: docker exec -i envtest "$(cat ./.github/workflows/test.sh)"
+        run: docker exec -i envtest zsh -c "$(cat ./.github/workflows/test.sh)"
