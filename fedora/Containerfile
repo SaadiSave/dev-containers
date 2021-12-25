@@ -2,9 +2,9 @@ FROM fedora:latest
 
 RUN dnf check-update && dnf upgrade; exit 0
 
-# git, GNU & LLVM toolchains, other Rust dependencies
+# git, GNU & LLVM toolchains, other Rust dependencies, and misc
 RUN dnf install -y dnf-plugins-core util-linux-user zsh git openssl \
-    openssl-devel gcc clang llvm lld
+    openssl-devel gcc clang llvm lld sqlite
 
 # Install rustup & Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -15,25 +15,20 @@ RUN source $HOME/.cargo/env && cargo install trunk cargo-audit cargo-edit \
 
 # .NET, JDK, Python, Ruby, Rust utils
 RUN dnf install -y dotnet java-latest-openjdk-devel ruby rubygems python3.10 \
-    python3-pip poetry bat gitui ripgrep fd-find just tokei jql exa
+    python3-pip poetry bat gitui ripgrep fd-find just tokei jql exa zoxide
 
 # Install GitHub CLI
 RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
     dnf install -y gh
 
 # For proper functioning of poetry
-RUN ln -s python3 /usr/bin/python
+RUN ln -s python3 /usr/bin/python && poetry config virtualenvs.in-project true
 
-# Poetry config
-RUN poetry config virtualenvs.in-project true
+# Setup shell & completions
+COPY .zshrc /root/.zshrc
+RUN chsh -s /bin/zsh && touch $HOME/.zsh_history && mkdir $HOME/.zsh && \
+    mkdir $HOME/.zsh/completions && \
+    rustup completions zsh rustup > $HOME/.zsh/completions/_cargo && \
+    rustup completions zsh cargo > $HOME/.zsh/completions/_cargo
 
-# Change default shell
-RUN chsh -s /bin/zsh
-
-# zshrc
-RUN touch $HOME/.zsh_history
-COPY fedora/.zshrc $HOME/.zshrc
-
-# completions
-RUN mkdir $HOME/.zsh
-RUN mkdir $HOME/.zsh/completions
+ENTRYPOINT [ "/bin/zsh" ]

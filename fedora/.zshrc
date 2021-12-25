@@ -12,3 +12,5 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000
 SAVEHIST=15000
 bindkey -e
+
+eval "$(zoxide init zsh)"
