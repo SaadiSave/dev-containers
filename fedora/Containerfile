@@ -2,9 +2,9 @@ FROM fedora:latest
 
 RUN dnf check-update && dnf upgrade; exit 0
 
-RUN dnf install -y python3.10 dotnet java-latest-openjdk-devel zsh git gcc clang llvm lld \
-    python3-pip poetry dnf-plugins-core openssl openssl-devel ruby rubygems bat gitui \
-    ripgrep fd-find just tokei jql exa
+RUN dnf install -y dnf-plugins-core util-linux-user zsh git openssl openssl-devel \
+    dotnet java-latest-openjdk-devel gcc clang llvm lld ruby rubygems python3.10 \
+    python3-pip poetry bat gitui ripgrep fd-find just tokei jql exa
 
 # Install GitHub CLI
 RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
