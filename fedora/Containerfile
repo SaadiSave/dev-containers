@@ -27,8 +27,8 @@ RUN ln -s python3 /usr/bin/python && poetry config virtualenvs.in-project true
 # Setup shell & completions
 COPY .zshrc /root/.zshrc
 RUN chsh -s /bin/zsh && touch $HOME/.zsh_history && mkdir $HOME/.zsh && \
-    mkdir $HOME/.zsh/completions && \
-    rustup completions zsh rustup > $HOME/.zsh/completions/_cargo && \
+    mkdir $HOME/.zsh/completions && source $HOME/.cargo/env && \
+    rustup completions zsh rustup > $HOME/.zsh/completions/_rustup && \
     rustup completions zsh cargo > $HOME/.zsh/completions/_cargo
 
 ENTRYPOINT [ "/bin/zsh" ]
