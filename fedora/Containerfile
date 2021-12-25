@@ -4,7 +4,7 @@ RUN dnf check-update && dnf upgrade; exit 0
 
 RUN dnf install -y python3.10 dotnet java-latest-openjdk-devel zsh git gcc clang llvm lld \
     python3-pip poetry dnf-plugins-core openssl openssl-devel ruby rubygems bat gitui \
-    ripgrep fd-find just tokei jql
+    ripgrep fd-find just tokei jql exa
 
 # Install GitHub CLI
 RUN dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
@@ -22,4 +22,13 @@ RUN poetry config virtualenvs.in-project true
 # Rust utilities not present in Fedora repos
 RUN source $HOME/.cargo/env && cargo install trunk cargo-audit cargo-edit du-dust rm-improved
 
-ENTRYPOINT [ "/bin/zsh" ]
+# Change default shell
+RUN chsh -s /bin/zsh
+
+# zshrc
+RUN touch $HOME/.zsh_history
+COPY fedora/.zshrc $HOME/.zshrc
+
+# completions
+RUN mkdir $HOME/.zsh
+RUN mkdir $HOME/.zsh/completions
